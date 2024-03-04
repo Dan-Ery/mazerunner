@@ -120,3 +120,68 @@ class Maze:
         for col in range(0, self.num_cols):
             for row in range(0, self.num_rows):
                 self.cells[col][row].visited = False
+
+    def solve(self):
+        return self._solve_r(0,0)
+
+    def _solve_r(self, col, row):
+        self._animate()
+
+        current_cell : Cell = self.cells[col][row]
+        current_cell.visited = True
+        if col == self.num_cols-1 and row == self.num_rows-1:
+            return True
+
+        if self._solve_left(col, row):
+            return True
+        if self._solve_right(col, row):
+            return True
+        if self._solve_up(col, row):
+            return True
+        if self._solve_down(col, row):
+            return True
+        return False
+
+    def _solve_left(self, col, row):
+        current_cell : Cell = self.cells[col][row]
+        if col > 0 and not current_cell.has_left_wall:
+            left_cell : Cell = self.cells[col-1][row]
+            if left_cell.visited is False:
+                current_cell.draw_move(left_cell, False)
+                if self._solve_r(col-1, row):
+                    return True
+                current_cell.draw_move(left_cell, True)
+        return False
+
+    def _solve_right(self, col, row):
+        current_cell : Cell = self.cells[col][row]
+        if col < self.num_cols-1 and not current_cell.has_right_wall:
+            right_cell : Cell = self.cells[col+1][row]
+            if right_cell.visited is False:
+                current_cell.draw_move(right_cell, False)
+                if self._solve_r(col+1, row):
+                    return True
+                current_cell.draw_move(right_cell, True)
+        return False
+
+    def _solve_up(self, col, row):
+        current_cell : Cell = self.cells[col][row]
+        if row > 0 and not current_cell.has_top_wall:
+            above_cell : Cell = self.cells[col][row-1]
+            if above_cell.visited is False:
+                current_cell.draw_move(above_cell, False)
+                if self._solve_r(col, row-1):
+                    return True
+                current_cell.draw_move(above_cell, True)
+        return False
+
+    def _solve_down(self, col, row):
+        current_cell : Cell = self.cells[col][row]
+        if row < self.num_rows-1 and not current_cell.has_bottom_wall:
+            below_cell : Cell = self.cells[col][row+1]
+            if below_cell.visited is False:
+                current_cell.draw_move(below_cell, False)
+                if self._solve_r(col, row+1):
+                    return True
+                current_cell.draw_move(below_cell, True)
+        return False
