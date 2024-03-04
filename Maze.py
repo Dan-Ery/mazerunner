@@ -21,6 +21,7 @@ class Maze:
         self.window=win
         
         self._create_cells()
+        self._break_entrance_and_exit()
     
     def _create_cells(self):
         cell_matrix = []
@@ -54,6 +55,15 @@ class Maze:
         if not window == None:
             window.redraw()
             time.sleep(0.05)
+
+    def _break_entrance_and_exit(self):
+        entry_cell = self.cells[0][0]
+        exit_cell = self.cells[self.num_cols - 1][self.num_rows - 1]
+        entry_cell.has_top_wall=False
+        exit_cell.has_bottom_wall=False
+        self._draw_cell(0, 0)
+        self._draw_cell(self.num_cols - 1, self.num_rows - 1)
+        
         
 
 class Cell:
@@ -76,18 +86,29 @@ class Cell:
         self.x2=x2
         self.y2=y2
 
+        left = Line(Point(x1, y1), Point(x1, y2))
         if self.has_left_wall:
-            line = Line(Point(x1, y1), Point(x1, y2))
-            self.window.draw_line(line, "black")
+            self.window.draw_line(left, "black")
+        else:
+            self.window.draw_line(left, "white")
+
+        right = Line(Point(x2, y1), Point(x2, y2))
         if self.has_right_wall:
-            line = Line(Point(x2, y1), Point(x2, y2))
-            self.window.draw_line(line, "black")
+            self.window.draw_line(right, "black")
+        else:
+            self.window.draw_line(right, "white")
+            
+        top = Line(Point(x1, y1), Point(x2, y1))
         if self.has_top_wall:
-            line = Line(Point(x1, y1), Point(x2, y1))
-            self.window.draw_line(line, "black")
+            self.window.draw_line(top, "black")
+        else:
+            self.window.draw_line(top, "white")
+            
+        bottom = Line(Point(x1, y2), Point(x2, y2))
         if self.has_bottom_wall:
-            line = Line(Point(x1, y2), Point(x2, y2))
-            self.window.draw_line(line, "black")
+            self.window.draw_line(bottom, "black")
+        else:
+            self.window.draw_line(bottom, "white")
 
     def get_center(self):
         center_x = (self.x1 + self.x2) / 2
