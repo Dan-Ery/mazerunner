@@ -23,15 +23,24 @@ class Cell:
         if self.has_left_wall:
             line = Line(Point(x1, y1), Point(x1, y2))
             self.window.draw_line(line, "black")
-            
         if self.has_right_wall:
             line = Line(Point(x2, y1), Point(x2, y2))
             self.window.draw_line(line, "black")
-            
         if self.has_top_wall:
             line = Line(Point(x1, y1), Point(x2, y1))
             self.window.draw_line(line, "black")
-            
         if self.has_bottom_wall:
             line = Line(Point(x1, y2), Point(x2, y2))
             self.window.draw_line(line, "black")
+
+    def get_center(self):
+        center_x = (self.x1 + self.x2) / 2
+        center_y = (self.y1 + self.y2) / 2
+        return Point(center_x, center_y)
+
+    def draw_move(self, to_cell, undo=False):
+        line_color = "red"
+        if undo:
+            line_color = "gray"
+        line = Line(self.get_center(), to_cell.get_center())
+        self.window.draw_line(line, line_color)
