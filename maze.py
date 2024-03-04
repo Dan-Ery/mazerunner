@@ -29,6 +29,7 @@ class Maze:
         self._create_cells()
         self._break_entrance_and_exit()
         self._break_walls_r(0, 0)
+        self._reset_cells_visited()
 
     def _create_cells(self):
         cell_matrix = []
@@ -114,3 +115,8 @@ class Maze:
             else:
                 self._draw_cell(col, row)
                 is_dead_end = True
+
+    def _reset_cells_visited(self):
+        for col in range(0, self.num_cols):
+            for row in range(0, self.num_rows):
+                self.cells[col][row].visited = False
