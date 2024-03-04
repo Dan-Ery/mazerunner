@@ -1,6 +1,6 @@
 """Module providing functionality for Mazes."""
 import time
-from Window import Point, Line
+from window import Point, Line
 
 class Maze:
     def __init__(

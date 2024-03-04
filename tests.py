@@ -1,5 +1,5 @@
 import unittest
-from Maze import Maze
+from maze import Maze
 
 class Tests(unittest.TestCase):
     def test_maze_create_cells(self):

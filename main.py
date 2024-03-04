@@ -1,6 +1,6 @@
 
-from Window import Window
-from Maze import Maze
+from window import Window
+from maze import Maze
 def main():
     win = Window(800, 600)
 
