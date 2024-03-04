@@ -28,6 +28,7 @@ class Maze:
 
         self._create_cells()
         self._break_entrance_and_exit()
+        self._break_walls_r(0, 0)
 
     def _create_cells(self):
         cell_matrix = []
@@ -69,3 +70,47 @@ class Maze:
         exit_cell.has_bottom_wall=False
         self._draw_cell(0, 0)
         self._draw_cell(self.num_cols - 1, self.num_rows - 1)
+
+    def _break_walls_r(self, col, row):
+        current_cell : Cell = self.cells[col][row]
+        current_cell.visited = True
+
+        is_dead_end = False
+        while not is_dead_end:
+            available_directions = []
+            if col > 0 and self.cells[col-1][row].visited is False:
+                available_directions.append(1)
+            if col < self.num_cols-1 and self.cells[col+1][row].visited is False:
+                available_directions.append(2)
+            if row > 0 and self.cells[col][row-1].visited is False:
+                available_directions.append(3)
+            if row < self.num_rows-1 and self.cells[col][row+1].visited is False:
+                available_directions.append(4)
+
+            if available_directions:
+                direction_index = random.randrange(len(available_directions))
+                direction = available_directions[direction_index]
+                match direction:
+                    case 1:
+                        current_cell.has_left_wall=False
+                        self.cells[col-1][row].has_right_wall = False
+                        self._draw_cell(col, row)
+                        self._break_walls_r(col-1,row)
+                    case 2:
+                        current_cell.has_right_wall=False
+                        self.cells[col+1][row].has_left_wall = False
+                        self._draw_cell(col, row)
+                        self._break_walls_r(col+1,row)
+                    case 3:
+                        current_cell.has_top_wall = False
+                        self.cells[col][row-1].has_bottom_wall = False
+                        self._draw_cell(col, row)
+                        self._break_walls_r(col,row-1)
+                    case 4:
+                        current_cell.has_bottom_wall = False
+                        self.cells[col][row+1].has_top_wall = False
+                        self._draw_cell(col, row)
+                        self._break_walls_r(col,row+1)
+            else:
+                self._draw_cell(col, row)
+                is_dead_end = True
